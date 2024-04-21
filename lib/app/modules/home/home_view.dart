@@ -137,19 +137,19 @@ class HomePage extends GetView<HomeController> {
                 icon: Icon(selectedIndex.value == 0
                     ? selectedIcons[0]
                     : unselectedIcons[0]),
-                label: 'Home',
+                label: 'Trang chủ',
               ),
               BottomNavigationBarItem(
                 icon: Icon(selectedIndex.value == 1
                     ? selectedIcons[1]
                     : unselectedIcons[1]),
-                label: 'Search',
+                label: 'Thông báo',
               ),
               BottomNavigationBarItem(
                 icon: Icon(selectedIndex.value == 2
                     ? selectedIcons[2]
                     : unselectedIcons[2]),
-                label: 'Profile',
+                label: 'Cá nhân',
               ),
             ],
             currentIndex: selectedIndex.value,
