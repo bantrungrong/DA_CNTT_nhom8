@@ -21,8 +21,8 @@ class _WidgetUserState extends State<WidgetUser> {
   Widget build(BuildContext context) {
     return Container(
       height: 66,
-      padding: EdgeInsets.symmetric(vertical: 12),
-      margin: EdgeInsets.only(left: 24),
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.only(left: 24),
       child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         Container(
           height: 40,
@@ -32,7 +32,7 @@ class _WidgetUserState extends State<WidgetUser> {
               borderRadius: BorderRadius.circular(100),
               image: DecorationImage(image: AssetImage(widget.assetsname))),
         ),
-        Gap(12),
+        const Gap(12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

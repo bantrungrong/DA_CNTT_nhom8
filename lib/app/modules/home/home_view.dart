@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -23,9 +21,9 @@ class HomePage extends GetView<HomeController> {
         taskReponsitory: TaskReponsitory(taskProvider: TaskProvider())));
     final selectedIndex = RxInt(0);
     final List<Widget> widgetOptions = <Widget>[
-      HomePageScreen(),
-      NotiScreen(),
-      HomePageGuest(),
+      const HomePageScreen(),
+      const NotiScreen(),
+      const HomePageGuest(),
     ];
 
     final List<IconData> selectedIcons = [
@@ -77,7 +75,7 @@ class HomePage extends GetView<HomeController> {
                         onTap: () {
                           Navigator.of(context).pop();
                         },
-                        child: ButtonApp(
+                        child: const ButtonApp(
                           height: 55,
                           width: 100,
                           title: 'Thoát',
@@ -90,9 +88,9 @@ class HomePage extends GetView<HomeController> {
                     Expanded(
                       child: GestureDetector(
                           onTap: () {
-                            Get.to(LoginScreen());
+                            Get.to(const LoginScreen());
                           },
-                          child: ButtonApp(
+                          child: const ButtonApp(
                             height: 55,
                             width: 100,
                             colorTitle: Colors.white,

@@ -1,10 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:getxapp/app/core/values/colors.dart';
 import 'package:getxapp/app/core/values/strings.dart';
+import 'package:getxapp/app/data/models/user.dart';
 import 'package:getxapp/app/screen/home_page/home_page_logined.dart';
 import 'package:getxapp/app/widget/button.dart';
+import 'package:http/http.dart' as http;
+
+import '../../data/providers/api_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,88 +20,60 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final List<Map<String, String>> users = [
-    {'username': '', 'password': ''},
-    {'username': '', 'password': ''},
-    {'username': '', 'password': ''},
-  ];
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  Future<void> _login(BuildContext context) async {
-    String username = usernameController.text;
-    String password = passwordController.text;
-
-    // Kiểm tra xem tên người dùng và mật khẩu có trong danh sách không
-    bool isValidUser = false;
-    for (var user in users) {
-      if (user['username'] == username && user['password'] == password) {
-        isValidUser = true;
-        break;
-      }
-    }
-
-    if (isValidUser) {
-      showDialog(
-        context: context,
-        barrierDismissible: false, // prevent dismissing by tapping outside
-        builder: (context) => AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(),
-              const SizedBox(height: 16),
-              Text('Đang đăng nhập...'),
-            ],
-          ),
-        ),
-      );
-      await Future.delayed(Duration(seconds: 2));
-      Navigator.pop(context); // Close loading dialog
-      Get.to(HomePageScreenLogined());
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          insetPadding: const EdgeInsets.all(10),
-          content: Container(
-            height: 120,
-            child: Column(
-              children: [
-                Text(
-                  'Đăng nhập không thành công',
-                  style: AppStyle.bold(fontSize: 16),
-                ),
-                Text(
-                  'Tên người dùng hoặc mật khẩu không chính xác',
-                  textAlign: TextAlign.center,
-                  style: AppStyle.regular(fontSize: 16),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text('OK'),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-  }
+  var name = TextEditingController();
+  var email = TextEditingController();
+  var password = TextEditingController();
+  var formKey=GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: _buildBody(context),
-          ),
+      body:  ListView(
+          scrollDirection: Axis.vertical,
+        children: [
+          _buildBody(context)
+        ],
         ),
-      ),
+
     );
   }
+  validateUser() async {
+    try{
+      var res = await http.post(Uri.parse(API.validateEmail),body: {
+        'user_email': email.text.trim(),
+      });
+      if(res.statusCode == 200){
+        var resBody = jsonDecode(res.body);
+        if(resBody['emailFound']){
+          Fluttertoast.showToast(msg: 'try another email');
+        }else{
+          saveUser();
+        }
+      }
+    }
+        catch(e){
 
+        }
+  }
+  saveUser()async{
+    User userModel = User(1, name.text.trim(), email.text.trim(), password.text.trim());
+    try{
+      var res = await http.post(Uri.parse(API.signUp),body: userModel.toJson());
+      if(res.statusCode == 200){
+        var resBodySignUp = jsonDecode(res.body);
+        if(resBodySignUp['success']==true){
+          Fluttertoast.showToast(msg: 'đăng kí thành công');
+        }
+        else
+          {
+            Fluttertoast.showToast(msg: 'đăng kí thất bại');
+          }
+      }
+    }catch(e){
+      print(e.toString());
+      Fluttertoast.showToast(msg: e.toString());
+    }
+  }
   Widget _buildBody(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 24, right: 24),
@@ -103,9 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.8,
-              child: Column(
+            Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   GestureDetector(
@@ -125,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppColors.primary,
                         )),
                   ),
-                  Gap(132),
+                  const Gap(132),
                   const Text(
                     'Đăng nhập',
                     style: TextStyle(
@@ -140,6 +116,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const Gap(20),
                   _buildTextFieldUserName(),
+                  const Gap(10),
+                  _buildTextFieldEmail(),
                   const Gap(10),
                   _buildTextFieldPassword(),
                   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -158,8 +136,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     )
                   ]),
+                   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      TextButton(
+                        onPressed: () {
+                          validateUser();
+                        },
+                        child: RichText(
+                          text: const TextSpan(
+                            text: 'Đăng ký',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: AppColors.primary,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      )
+                    ]),
+
                   GestureDetector(
-                    onTap: () => _login(context),
+                    onTap: (){
+                      // if(formKey.currentState!.validate()){
+                      //   validateUser();
+                      // }
+                      Get.to(HomePageScreenLogined());
+                    },
                     child: ButtonApp(
                         height: 50,
                         width: Get.width * 0.9,
@@ -169,8 +171,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   )
                 ],
               ),
-            ),
-            Gap(24)
+
+            const Gap(24)
           ]),
     );
   }
@@ -189,7 +191,35 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(
           width: MediaQuery.of(context).size.height,
           child: TextFormField(
-            controller: usernameController,
+            controller: name,
+            readOnly: false,
+            maxLines: 1,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            decoration: const InputDecoration(
+              errorStyle: TextStyle(height: 0),
+              contentPadding: EdgeInsets.all(10),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildTextFieldEmail() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Email',
+          style: AppStyle.medium(
+            fontSize: 14,
+          ),
+        ),
+        const Gap(8),
+        SizedBox(
+          width: MediaQuery.of(context).size.height,
+          child: TextFormField(
+            controller: email,
             readOnly: false,
             maxLines: 1,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -204,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildTextFieldPassword() {
-    bool _passwordVisible = false;
+    bool passwordVisible = false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -218,17 +248,17 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(
           width: MediaQuery.of(context).size.height,
           child: TextFormField(
-            controller: passwordController,
+            controller: password,
             readOnly: false,
             maxLines: 1,
-            obscureText: !_passwordVisible,
+            obscureText: !passwordVisible,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
                 errorStyle: const TextStyle(height: 0),
                 contentPadding: const EdgeInsets.all(10),
                 suffixIcon: IconButton(
                   icon: Icon(
-                    !_passwordVisible
+                    !passwordVisible
                         ? Icons.visibility_outlined
                         // ignore: dead_code
                         : Icons.visibility_off_outlined,
@@ -237,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   onPressed: () {
                     setState(() {
-                      _passwordVisible = !_passwordVisible;
+                      passwordVisible = !passwordVisible;
                     });
                   },
                 )),

@@ -32,7 +32,7 @@ class _HomePageScreenLoginedState extends State<HomePageScreenLogined> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(100)),
                 ),
-                Gap(10),
+                const Gap(10),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -75,13 +75,13 @@ class _HomePageScreenLoginedState extends State<HomePageScreenLogined> {
             children: [
               GestureDetector(
                   onTap: () {
-                    Get.to(EventScreen());
+                    Get.to(const EventScreen());
                   },
                   child: _buildCell('Tin tức Đại lý')),
               GestureDetector(
                   onTap: () {
                     // Navigator.pushNamed(context, ProductScreen() );
-                    Get.to(ProductScreen());
+                    Get.to(const ProductScreen());
                   },
                   child: _buildCell('Quản lý danh mục sản phẩm')),
               _buildCell('Quản lý thông tin đại lý'),
@@ -99,7 +99,7 @@ class _HomePageScreenLoginedState extends State<HomePageScreenLogined> {
     return Container(
       height: 100,
       width: 100,
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -108,7 +108,7 @@ class _HomePageScreenLoginedState extends State<HomePageScreenLogined> {
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 1,
-            offset: Offset(0, 2), // changes the direction of shadow
+            offset: const Offset(0, 2), // changes the direction of shadow
           ),
         ],
       ),

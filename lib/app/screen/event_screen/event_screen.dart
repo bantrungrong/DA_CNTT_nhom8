@@ -54,7 +54,7 @@ class _EventScreenState extends State<EventScreen> {
                 width: 36,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                    image: DecorationImage(
+                    image: const DecorationImage(
                         image: AssetImage('assets/images/icon/filter.png')),
                     color: Colors.white),
               ),
@@ -78,10 +78,10 @@ class _EventScreenState extends State<EventScreen> {
         Expanded(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             height: 40,
             decoration: BoxDecoration(
-                color: Color.fromRGBO(240, 240, 240, 1),
+                color: const Color.fromRGBO(240, 240, 240, 1),
                 borderRadius: BorderRadius.circular(10)),
             child: Row(
                 children: List.generate(
@@ -98,7 +98,7 @@ class _EventScreenState extends State<EventScreen> {
                   decoration: BoxDecoration(
                       color: _currentIndex == index
                           ? Colors.white
-                          : Color.fromRGBO(240, 240, 240, 1),
+                          : const Color.fromRGBO(240, 240, 240, 1),
                       borderRadius: BorderRadius.circular(10)),
                   child: Center(
                     child: _currentIndex == index
@@ -109,7 +109,8 @@ class _EventScreenState extends State<EventScreen> {
                           )
                         : Text(selectedIndex[index],
                             style: AppStyle.medium(
-                                    color: Color.fromRGBO(141, 141, 141, 1),
+                                    color:
+                                        const Color.fromRGBO(141, 141, 141, 1),
                                     fontSize: 13)
                                 .copyWith(fontWeight: FontWeight.w500)),
                   ),
@@ -132,11 +133,11 @@ class _EventScreenState extends State<EventScreen> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              Get.to(NewEventScreen());
+              Get.to(const NewEventScreen());
             },
             child: Container(
               height: Get.height * 0.2,
-              margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
@@ -144,7 +145,8 @@ class _EventScreenState extends State<EventScreen> {
                     color: Colors.grey.withOpacity(0.2),
                     spreadRadius: 1,
                     blurRadius: 1,
-                    offset: Offset(0, 2), // changes the direction of shadow
+                    offset:
+                        const Offset(0, 2), // changes the direction of shadow
                   ),
                 ],
               ),

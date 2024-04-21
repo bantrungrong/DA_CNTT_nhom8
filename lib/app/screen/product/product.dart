@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:getxapp/app/core/values/colors.dart';
 import 'package:getxapp/app/core/values/strings.dart';
-import 'package:getxapp/app/widget/widget_product.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -51,7 +50,7 @@ class _ProductScreenState extends State<ProductScreen> {
   ];
   // bool checkStatus = false;
   List<String> filteredUserName = [];
-  TextEditingController _textController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   void _searchUsers(String query) {
     filteredUserName.clear();
     if (query.isNotEmpty) {
@@ -110,9 +109,8 @@ class _ProductScreenState extends State<ProductScreen> {
             builder: (context) {
               String newName = '';
               String newCompany = '';
-              String newStatus = '';
               return AlertDialog(
-                title: Text('Add Product'),
+                title: const Text('Add Product'),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -120,17 +118,18 @@ class _ProductScreenState extends State<ProductScreen> {
                       onChanged: (value) {
                         newName = value;
                       },
-                      decoration: InputDecoration(labelText: 'Product Name'),
+                      decoration:
+                          const InputDecoration(labelText: 'Product Name'),
                     ),
                     TextField(
                       onChanged: (value) {
                         newCompany = value;
                       },
-                      decoration: InputDecoration(labelText: 'Company'),
+                      decoration: const InputDecoration(labelText: 'Company'),
                     ),
                     DropdownButtonFormField<bool>(
                       value: true, // Default value for the product status
-                      items: [
+                      items: const [
                         DropdownMenuItem<bool>(
                           value: true,
                           child: Text('Còn sản xuất'),
@@ -142,7 +141,6 @@ class _ProductScreenState extends State<ProductScreen> {
                       ],
                       onChanged: (value) {
                         // Update the status when the dropdown value changes
-                        newStatus = value.toString();
                       },
                     ),
                   ],
@@ -152,21 +150,21 @@ class _ProductScreenState extends State<ProductScreen> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                   ),
                   TextButton(
                     onPressed: () {
                       addProduct(newName, newCompany);
                       Navigator.of(context).pop();
                     },
-                    child: Text('Add'),
+                    child: const Text('Add'),
                   ),
                 ],
               );
             },
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -241,13 +239,13 @@ class _ProductScreenState extends State<ProductScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             size: 24,
             color: Colors.white,
           ),
         ),
-        Gap(8),
+        const Gap(8),
         Container(
           width: MediaQuery.of(context).size.width * 0.8,
           height: 46,
@@ -257,7 +255,7 @@ class _ProductScreenState extends State<ProductScreen> {
             readOnly: false,
             maxLines: 1,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
               filled: true,
               errorStyle: TextStyle(height: 0),
@@ -285,8 +283,8 @@ class _ProductScreenState extends State<ProductScreen> {
     int index, // Add index parameter to identify the product
   ) {
     return Container(
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: Colors.white,
@@ -295,7 +293,7 @@ class _ProductScreenState extends State<ProductScreen> {
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 1,
-            offset: Offset(0, 2), // changes the direction of shadow
+            offset: const Offset(0, 2), // changes the direction of shadow
           ),
         ],
       ),
@@ -307,7 +305,7 @@ class _ProductScreenState extends State<ProductScreen> {
               borderRadius: BorderRadius.circular(100),
               image: DecorationImage(image: AssetImage(assetsname))),
         ),
-        Gap(12),
+        const Gap(12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
